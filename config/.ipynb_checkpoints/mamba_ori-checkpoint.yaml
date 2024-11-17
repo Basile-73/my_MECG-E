@@ -1,0 +1,20 @@
+
+#type: args
+
+train:
+  epochs: 40
+  batch_size: 96 
+  lr: 5.0e-4
+
+model:
+  norm: True
+  dense_channel: 64
+  compress_factor: 0.3
+  num_tscblocks: 4
+  sampling_rate: 16000
+  n_fft: 64
+  hop_size: 8
+  win_size: 64
+  beta: 2
+  loss_fn: "v1"
+
