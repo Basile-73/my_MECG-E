@@ -14,7 +14,7 @@ Electrocardiogram (ECG) is an important non-invasive method for diagnosing cardi
 
 ## Installation
 
-### Requirement
+#### Requirement
     * Python >= 3.9
     * CUDA >= 12.0
     * PyTorch == 2.2.2
