@@ -7,7 +7,7 @@ train:
   lr: 1.0e-4
 
 model:
-  fea: "pha"
+  fea: "wav"
   norm: False
   fmamba: True
   dense_channel: 32
@@ -18,5 +18,5 @@ model:
   hop_size: 8
   win_size: 64
   beta: 2
-  loss_fn: "time+com"
+  loss_fn: "time"
 

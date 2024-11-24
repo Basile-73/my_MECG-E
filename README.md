@@ -55,7 +55,7 @@ Note: Installing the package from the provided source (`mamba`) is recommended t
 1. **Set Hyperparameters:** Update the hyperparameters in the configuration file (.yaml) as needed.
 2. **Run the Code:** Execute the following example command (e.g., the configuration file is `MECGE_phase.yaml`):
 ```bash
-python main.py --n_type bw --config config/MECGE_wav.yaml
+python main.py --n_type bw --config config/MECGE_phase.yaml
 ```
 
 You can download the pre-trained model weights from this [link](https://drive.google.com/file/d/17qAyAJIw0zPFJwtkSsfwB7GeOsylq2_P/view?usp=sharing). Create a folder named model_weight and place the downloaded weight file inside it. We provide the best-performing models for various input features, with their results summarized in the table below.
@@ -67,10 +67,10 @@ You can download the pre-trained model weights from this [link](https://drive.go
 | <sub>MECG-E</sub> | <sub>Mag.+Phase</sub> | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | <sub>3.445 (6.493)</sub> | <sub>0.319 (0.252)</sub> | <sub>37.613 (22.389)</sub> | <sub>0.936 (0.077)</sub> |
 
 ### Testing
-Training the model from scratch will automatically include the testing stage. For cases where the pretrained weights are already available (e.g., downloaded the pretrained weights), and retraining is not required, use the following command:
+Training the model from scratch will automatically include the testing stage. For cases where the pretrained weights are already available (e.g., downloaded the pretrained weights), and retraining is not required, use the following command (e.g., the configuration file is `MECGE_phase.yaml`):
 
 ```bash
-python main.py --n_type bw --config config/MECGE_wav.yaml --test
+python main.py --n_type bw --config config/MECGE_phase.yaml --test
 ```
 
 ### Evaluate the Result
