@@ -61,6 +61,7 @@ python main.py --n_type bw --config config/MECGE_wav.yaml
 You can download the pre-trained model weights from this [link](https://drive.google.com/file/d/17qAyAJIw0zPFJwtkSsfwB7GeOsylq2_P/view?usp=sharing). Create a folder named model_weight and place the downloaded weight file inside it. We provide the best-performing models for various input features, with their results summarized in the table below.
 
 | Model | Input | Loss function | SSD | MAD | PRD | Cos_Sim |
+|---    |---    |---            |---  |---  |---  |---      |
 | MECG-E | Waveform   | $`\mathcal{L}_{time}`$ | 3.906 (6.662) | 0.360 (0.281) | 38.949 (22.947) | 0.929 (0.081) |
 | MECG-E | Complex    | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.891 (7.909) | 0.326 (0.270) | 37.734 (23.098) | 0.931 (0.084) |
 | MECG-E | Mag.+Phase | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.445 (6.493) | 0.319 (0.252) | 37.613 (22.389) | 0.936 (0.077) |
