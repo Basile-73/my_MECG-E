@@ -9,38 +9,31 @@ Electrocardiogram (ECG) is an important non-invasive method for diagnosing cardi
 
 ## Pre-requisites
 1. Clone this repository.
-2. Install python requirements. Please refer [Requirement](#requirement) and [Installation](#installation).
+2. Install python requirements. Please refer to [Installation](#installation).
 3. Download and extract the [ECG data](https://drive.google.com/file/d/19qOwywAoxreEv4xONTk-smQdo-ZdoPBc/view?usp=sharing). Clean ECG records from the [QT Database](https://ieeexplore.ieee.org/document/648140) were corrupted using noise profiles from the MIT-BIH Noise Stress Test Database ([NSTDB](https://physionet.org/content/nstdb/1.0.0/)). Dataset preprocessing follows the procedure outlined in [DeepFilter](https://github.com/fperdigon/DeepFilter/tree/master/Data_Preparation).
 
-## Requirement
+## Installation
+
+### Requirement
     * Python >= 3.9
     * CUDA >= 12.0
     * PyTorch == 2.2.2
 
-## Installation
-### Create a Python environment with Conda
-
-It is strongly recommended to set up a dedicated Python environment to manage dependencies effectively and prevent conflicts.
+1. **Create a Python environment with Conda:** It is strongly recommended to set up a dedicated Python environment to manage dependencies effectively and prevent conflicts.
 ```bash
 conda create --name mecge python=3.9
 conda activate mecge
 ```
 
-### Install PyTorch
+2. **Install PyTorch:** Install PyTorch 2.2.2 from the official PyTorch website. Refer to the [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) section for installation commands tailored to your system configuration (e.g., operating system, CUDA version).
 
-Install PyTorch 2.2.2 from the official PyTorch website. Refer to the [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) section for installation commands tailored to your system configuration (e.g., operating system, CUDA version).
-
-#### Install Required Packages
-
-Once the environment is set up and PyTorch is installed, install the necessary Python packages listed in `requirements.txt`.
+3. **Install Required Packages:** Once the environment is set up and PyTorch is installed, install the necessary Python packages listed in `requirements.txt`.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-#### Install the Mamba Package
-
-Navigate to the mamba directory and install the package. This step ensures that all required components are properly installed.
+4. **Install the Mamba Package:** Navigate to the mamba directory and install the package. This step ensures that all required components are properly installed.
 
 ```bash
 cd mamba
