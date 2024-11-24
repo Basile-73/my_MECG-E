@@ -62,9 +62,9 @@ You can download the pre-trained model weights from this [link](https://drive.go
 
 | Model | Input | Loss function | SSD | MAD | PRD | Cos_Sim |
 |---    |---    |---            |---  |---  |---  |---      |
-| MECG-E | Waveform   | $`\mathcal{L}_{time}`$ | 3.906 (6.662) | 0.360 (0.281) | 38.949 (22.947) | 0.929 (0.081) |
-| MECG-E | Complex    | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.891 (7.909) | 0.326 (0.270) | 37.734 (23.098) | 0.931 (0.084) |
-| MECG-E | Mag.+Phase | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.445 (6.493) | 0.319 (0.252) | 37.613 (22.389) | 0.936 (0.077) |
+| <sub>MECG-E</sub> | Waveform   | $`\mathcal{L}_{time}`$ | 3.906 (6.662) | 0.360 (0.281) | 38.949 (22.947) | 0.929 (0.081) |
+| <sub>MECG-E</sub> | Complex    | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.891 (7.909) | 0.326 (0.270) | 37.734 (23.098) | 0.931 (0.084) |
+| <sub>MECG-E</sub> | Mag.+Phase | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | 3.445 (6.493) | 0.319 (0.252) | 37.613 (22.389) | 0.936 (0.077) |
 
 ### Testing
 Training the model from scratch will automatically include the testing stage. For cases where the pretrained weights are already available (e.g., downloaded the pretrained weights), and retraining is not required, use the following command:
