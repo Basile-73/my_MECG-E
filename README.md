@@ -19,6 +19,7 @@ Electrocardiogram (ECG) is an important non-invasive method for diagnosing cardi
     * CUDA >= 12.0
     * PyTorch == 2.2.2
 
+#### Environment installation
 1. **Create a Python environment with Conda:** It is strongly recommended to set up a dedicated Python environment to manage dependencies effectively and prevent conflicts.
 ```bash
 conda create --name mecge python=3.9
