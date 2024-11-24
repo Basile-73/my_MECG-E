@@ -30,7 +30,7 @@ conda activate mecge
 
 Install PyTorch 2.2.2 from the official PyTorch website. Refer to the [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) section for installation commands tailored to your system configuration (e.g., operating system, CUDA version).
 
-### Install Required Packages
+#### Install Required Packages
 
 Once the environment is set up and PyTorch is installed, install the necessary Python packages listed in `requirements.txt`.
 
@@ -38,7 +38,7 @@ Once the environment is set up and PyTorch is installed, install the necessary P
 pip install -r requirements.txt
 ```
 
-### Install the Mamba Package
+#### Install the Mamba Package
 
 Navigate to the mamba directory and install the package. This step ensures that all required components are properly installed.
 
@@ -50,7 +50,7 @@ pip install .
 Note: Installing the package from the provided source (`mamba`) is recommended to prevent dependency issues and ensure compatibility across various packages. Follow these instructions carefully to avoid potential conflicts.
 
 ## Code Usage
-### Training
+#### Training
 
 1. **Set Hyperparameters:** Update the hyperparameters in the configuration file (.yaml) as needed.
 2. **Run the Code:** Execute the following example command (e.g., the configuration file is `MECGE_phase.yaml`):
@@ -66,14 +66,14 @@ You can download the pre-trained model weights from this [link](https://drive.go
 | <sub>MECG-E</sub> | <sub>Complex</sub>    | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | <sub>3.891 (7.909)</sub> | <sub>0.326 (0.270)</sub> | <sub>37.734 (23.098)</sub> | <sub>0.931 (0.084)</sub> |
 | <sub>MECG-E</sub> | <sub>Mag.+Phase</sub> | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$ | <sub>3.445 (6.493)</sub> | <sub>0.319 (0.252)</sub> | <sub>37.613 (22.389)</sub> | <sub>0.936 (0.077)</sub> |
 
-### Testing
+#### Testing
 Training the model from scratch will automatically include the testing stage. For cases where the pretrained weights are already available (e.g., downloaded the pretrained weights), and retraining is not required, use the following command (e.g., the configuration file is `MECGE_phase.yaml`):
 
 ```bash
 python main.py --n_type bw --config config/MECGE_phase.yaml --test
 ```
 
-### Evaluate the Result
+#### Evaluate the Result
 Evaluate the result of multiple configuration files (e.g., `MECGE_phase.yaml` and `MECGE_complex.yaml`).
 ```bash
 python cal_metrics.py --experiments MECGE_phase MECGE_complex
