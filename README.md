@@ -89,6 +89,19 @@ Note: If you download the data from our provided [link](https://drive.google.com
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
+
+## Citation
+
+If you find the code helpful, please cite the following article.
+```
+@article{hung2024mecg,
+  title={MECG-E: Mamba-based ECG Enhancer for Baseline Wander Removal},
+  author={Hung, Kuo-Hsuan and Wang, Kuan-Chen and Liu, Kai-Chun and Chen, Wei-Lun and Lu, Xugang and Tsao, Yu and Lin, Chii-Wann},
+  journal={arXiv preprint arXiv:2409.18828},
+  year={2024}}
+
+```
+
 ## Acknowledgments
 * We acknowledge that our code is heavily based on implementations provided in several GitHub repositories ([DeepFilter](https://github.com/fperdigon/DeepFilter/tree/master/Data_Preparation), [DeScoD-ECG](https://github.com/HuayuLiArizona/Score-based-ECG-Denoising) and [SEMamba](https://github.com/RoyChao19477/SEMamba)), and we extend our gratitude to the respective authors for making their work publicly available.
 * [Bio-ASP Lab](https://bio-asplab.citi.sinica.edu.tw), CITI, Academia Sinica, Taipei, Taiwan
