@@ -44,7 +44,7 @@ pip install .
 Note: Installing the package from the provided source (`mamba`) is recommended to prevent dependency issues and ensure compatibility across various packages. Follow these instructions carefully to avoid potential conflicts.
 
 ## Code Usage
-#### *Training*
+#### -Training
 
 1. **Set Hyperparameters:** Update the hyperparameters in the configuration file (.yaml) as needed.
 2. **Run the Code:** Execute the following example command (e.g., the configuration file is `MECGE_phase.yaml`):
