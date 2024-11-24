@@ -63,7 +63,7 @@ You can download the pre-trained model weights from this [link](https://drive.go
 | <sub>Model</sub> | <sub>Input</sub> | <sub>Loss function</sub> | <sub>SSD (au) $`\downarrow`$</sub> | <sub>MAD</sub> | <sub>PRD</sub> | <sub>Cos_Sim</sub> |
 |---    |---    |---            |---  |---  |---  |---      |
 | <sub>MECG-E</sub> | <sub>Waveform</sub>   | <sub>$`\mathcal{L}_{time}`$</sub> | <sub>3.906 (6.662)</sub> | <sub>0.360 (0.281)</sub> | <sub>38.949 (22.947)</sub> | <sub>0.929 (0.081)</sub> |
-| <sub>MECG-E</sub> | <sub>Complex</sub>    | <sub>$`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$</sub> | <sub>3.891 (7.909)</sub> | <sub>0.326 (0.270)</sub> | <sub>37.734 (23.098)</sub> | <sub>0.931 (0.084)</sub> |
+| <sub>MECG-E</sub> | <sub>Complex    | $`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$</sub> | <sub>3.891 (7.909)</sub> | <sub>0.326 (0.270)</sub> | <sub>37.734 (23.098)</sub> | <sub>0.931 (0.084)</sub> |
 | <sub>MECG-E</sub> | <sub>Mag.+Phase</sub> | <sub>$`\mathcal{L}_{time}`$+$`\mathcal{L}_{cpx}`$+$`\mathcal{L}_{con}`$</sub> | <sub>3.445 (6.493)</sub> | <sub>0.319 (0.252)</sub> | <sub>37.613 (22.389)</sub> | <sub>0.936 (0.077)</sub> |
 
 ### Testing
