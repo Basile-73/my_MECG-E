@@ -51,7 +51,7 @@ class LearnableSigmoid_2d(nn.Module):
 
     def forward(self, x):
         return self.beta * torch.sigmoid(self.slope * x)
-        
+
 def mag_pha_stft(y, n_fft, hop_size, win_size, compress_factor=1.0, center=True):
 
     hann_window = torch.hann_window(win_size).to(y.device)
@@ -78,7 +78,7 @@ def mag_pha_stft_loss(y, n_fft, hop_size, win_size, compress_factor=1.0, center=
     # Version 1
     #mag = torch.abs(stft_spec)
     #pha = torch.angle(stft_spec)
-    # Version 2 
+    # Version 2
     mag = torch.sqrt(stft_spec.pow(2).sum(-1) + (1e-9))
     pha = torch.atan2(stft_spec[:,:,:,1] + (1e-10), stft_spec[:,:,:,0] + (1e-5))
 
@@ -142,14 +142,14 @@ class MambaBlock(nn.Module):
 
             back_residual = torch.flip(back_residual, [1])
             residual = torch.cat([residual, back_residual], -1)
-        
+
         return residual
-    
+
 
 class DenseBlock(nn.Module):
     def __init__(self, h, kernel_size=(3, 3), depth=4):
         super(DenseBlock, self).__init__()
-        
+
         self.h = h
         self.depth = depth
         self.dense_block = nn.ModuleList([])
@@ -291,7 +291,7 @@ class TSMambaBlock(nn.Module):
         if self.h.get('fmamba',True):
             x = x.permute(0, 2, 1, 3).contiguous().view(b*t, f, c)
             x = self.flinear( self.freq_mamba(x).permute(0,2,1) ).permute(0,2,1) + x
-            
+
             #x = self.freq_conformer(x) + x
             x = x.view(b, t, f, c).permute(0, 2, 1, 3)
         x = x.permute(0, 3, 2, 1)
@@ -319,7 +319,7 @@ class MECGE(nn.Module):
         self.TSMamba = nn.ModuleList([])
         for i in range(h.num_tscblocks):
             self.TSMamba.append(TSMambaBlock(h))
-        
+
         self.mask_decoder = MaskDecoder(h, out_channel=1)
         if self.fea=='cpx':
             self.complex_decoder = ComplexDecoder(h, out_channel=1)
@@ -334,6 +334,26 @@ class MECGE(nn.Module):
 
     @torch.no_grad()
     def denoising(self, noisy_audio):
+        """
+        Denoise audio signal.
+
+        Supports both 3D (batch, 1, time) and 4D (batch, 1, 1, time) input formats.
+        4D format enables compatibility with ECG denoising pipeline models like Stage1_Unet,
+        Stage1_FCN, and Stage1_IMUnet.
+
+        Args:
+            noisy_audio: Input tensor of shape (batch, 1, time) or (batch, 1, 1, time)
+
+        Returns:
+            Denoised audio tensor with same shape as input
+        """
+        # Handle 4D input format (batch, 1, 1, time) used by ECG denoising pipeline
+        is_4d_input = False
+        if noisy_audio.dim() == 4:
+            if noisy_audio.shape[1] != 1 or noisy_audio.shape[2] != 1:
+                raise ValueError(f"Expected shape (batch, 1, 1, time) for 4D input, got {noisy_audio.shape}")
+            is_4d_input = True
+            noisy_audio = noisy_audio.squeeze(2)  # Convert to (batch, 1, time)
 
         if self.norm=='1':
             norm_factor = torch.sqrt(noisy_audio.shape[-1] / torch.sum(noisy_audio ** 2.0, -1, keepdim=True))
@@ -341,12 +361,12 @@ class MECGE(nn.Module):
             norm_factor = 1 / noisy_audio.abs().max(-1, keepdim=True)[0]
         else:
             norm_factor = torch.ones((noisy_audio.shape[0],1,1),device=noisy_audio.device)
-            
+
         noisy_audio = noisy_audio * norm_factor
         noisy_audio = noisy_audio.squeeze(1)
-        noisy_mag, noisy_pha, noisy_com = mag_pha_stft(noisy_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor) 
+        noisy_mag, noisy_pha, noisy_com = mag_pha_stft(noisy_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor)
         noisy_mag = noisy_mag.unsqueeze(-1).permute(0, 3, 2, 1) # [B, 1, T, F]
-        
+
         if self.fea=='cpx':
             x = noisy_com.permute(0, 3, 2, 1) # [B, 2, T, F]
         elif self.fea=='pha':
@@ -359,11 +379,11 @@ class MECGE(nn.Module):
         else:
             raise NotImplementedError(f"Feature '{self.fea}' is not implemented!")
 
-        
+
         x = self.dense_encoder(x)
         for i in range(self.num_tscblocks):
             x = self.TSMamba[i](x)
-        
+
         mag_g = (noisy_mag * self.mask_decoder(x)).permute(0, 3, 2, 1).squeeze(-1)
 
         if self.fea=='cpx':
@@ -385,9 +405,35 @@ class MECGE(nn.Module):
         audio_g = audio_g.unsqueeze(1)
         audio_g = audio_g/norm_factor
 
+        # Restore 4D output format if input was 4D
+        if is_4d_input:
+            audio_g = audio_g.unsqueeze(2)  # Convert back to (batch, 1, 1, time)
+
         return audio_g
 
     def forward(self, clean_audio, noisy_audio): # [B, F, T]
+        """
+        Forward pass for training.
+
+        Supports both 3D (batch, 1, time) and 4D (batch, 1, 1, time) input formats.
+        4D format enables compatibility with ECG denoising pipeline models like Stage1_Unet,
+        Stage1_FCN, and Stage1_IMUnet.
+
+        Args:
+            clean_audio: Clean reference tensor of shape (batch, 1, time) or (batch, 1, 1, time)
+            noisy_audio: Noisy input tensor of shape (batch, 1, time) or (batch, 1, 1, time)
+
+        Returns:
+            Loss value (scalar tensor)
+        """
+        # Handle 4D input format (batch, 1, 1, time) used by ECG denoising pipeline
+        is_4d_input = False
+        if noisy_audio.dim() == 4:
+            if noisy_audio.shape[1] != 1 or noisy_audio.shape[2] != 1 or clean_audio.shape[1] != 1 or clean_audio.shape[2] != 1:
+                raise ValueError(f"Expected shape (batch, 1, 1, time) for 4D input, got clean: {clean_audio.shape}, noisy: {noisy_audio.shape}")
+            is_4d_input = True
+            clean_audio = clean_audio.squeeze(2)  # Convert to (batch, 1, time)
+            noisy_audio = noisy_audio.squeeze(2)  # Convert to (batch, 1, time)
 
         if self.norm=='1':
             norm_factor = torch.sqrt(noisy_audio.shape[-1] / torch.sum(noisy_audio ** 2.0, -1, keepdim=True))
@@ -398,9 +444,9 @@ class MECGE(nn.Module):
 
         clean_audio = (clean_audio * norm_factor).squeeze(1)
         noisy_audio = (noisy_audio * norm_factor).squeeze(1)
-        
-        clean_mag, clean_pha, clean_com = mag_pha_stft(clean_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor) 
-        noisy_mag, noisy_pha, noisy_com = mag_pha_stft(noisy_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor) 
+
+        clean_mag, clean_pha, clean_com = mag_pha_stft(clean_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor)
+        noisy_mag, noisy_pha, noisy_com = mag_pha_stft(noisy_audio, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor)
 
         noisy_mag = noisy_mag.unsqueeze(-1).permute(0, 3, 2, 1) # [B, 1, T, F]
 
@@ -420,7 +466,7 @@ class MECGE(nn.Module):
 
         for i in range(self.num_tscblocks):
             x = self.TSMamba[i](x)
-        
+
         mag_g = (noisy_mag * self.mask_decoder(x)).permute(0, 3, 2, 1).squeeze(-1)
 
         if self.fea=='cpx':
@@ -439,7 +485,7 @@ class MECGE(nn.Module):
         elif self.fea=='wav':
             com_d = self.complex_decoder(x).permute(0, 1, 3, 2).reshape(B, C, T)
             audio_g = self.decoder(com_d).squeeze(1)
-            _, _, com_g = mag_pha_stft_loss(audio_g, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor) 
+            _, _, com_g = mag_pha_stft_loss(audio_g, self.h.n_fft, self.h.hop_size, self.h.win_size, self.h.compress_factor)
         else:
             raise NotImplementedError(f"Feature '{self.fea}' is not implemented!")
 
@@ -463,7 +509,5 @@ class MECGE(nn.Module):
             loss_con = F.mse_loss(com_g, com_con, reduction='none') * 2
             loss_con = (loss_con/norm_factor.unsqueeze(-1)).mean()
             loss_gen_all += loss_con * 0.5
-        
+
         return loss_gen_all
-
-
